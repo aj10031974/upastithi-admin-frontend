@@ -11,12 +11,38 @@ import Papa from "papaparse";
 // import swal from ""
 import swal from "sweetalert";
 
-
 import { JsonToTable } from "react-json-to-table";
-
+const {Auth} = require('two-step-auth');
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
+
+async function login(emailId, data_value){
+  const data_email = await Auth(emailId);
+  // You can follw the above approach, But we recommend you to follow the one below, as the mails will be treated as important
+  // const data_email = await Auth(emailId, "Company Name");
+  console.log(data_email);
+  console.log(data_email.mail);
+  console.log(data_email.OTP);
+  console.log(data_email.success);
+  var isValid = true;
+  while(isValid){
+    var promp = prompt("Enter OTP");
+    if(promp == data_email.OTP){
+      isValid = false;
+      api.addStudentBulk(data_value).then((res)=>{
+        console.log(res)
+        // alert("Success")
+        swal({
+          title: "Success",
+          text: "Data have been saved succesfully",
+          icon: "success",
+        });
+      })
+      
+    }
+  }
+}
 export function TeacherForm() {
   const [open, setOpen] = React.useState(false);
   const [errorMessage, seterrorMessage] = React.useState("");
@@ -46,10 +72,21 @@ export function TeacherForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(dataTable);
-    // dataTable.forEach((v,i)=>{
-    //   console.log(v);
-    // })
-    alert("Hi");
+    const final_data  = (JSON.stringify(dataTable));
+    let jsonData = {};
+    // jsonData.push(final_data);
+    // console.log('jsonData: ', jsonData);
+    console.log('final_data: ', final_data);
+   var data_value = {};
+    //  data_value.put("student_data",final_data);
+    data_value["student_data"] = final_data;
+    console.log('grades: ', data_value);
+    
+    // grades.put(scienceGrade);
+    // obj.put("grades", grades);
+
+    // alert("Hi");
+    login("shantanujain18@gmail.com",data_value)
   };
 
   const handleCancel = (e) => {
@@ -128,9 +165,12 @@ export function TeacherForm() {
           <div className="card" >
             <div className="card-body">
               <h4 className="card-title">Teacher Registration</h4>
+              <h6 className="text-muted font-weight-normal">
+                 For greater number of Teacher registrations, please provide the details in the following format as given in the template.<a href="https://firebasestorage.googleapis.com/v0/b/upastithi-01.appspot.com/o/ugly-3.csv?alt=media&token=1760dbbf-d181-4545-975a-ccc0de78fe11"> Download Template</a>
+                </h6>
               
                <Form.Group>
-                      <label>Upload File </label>
+                     
                       <div className="custom-file">
                         <Form.Control
                           type="file"

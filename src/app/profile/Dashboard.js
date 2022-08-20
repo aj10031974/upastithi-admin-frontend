@@ -165,7 +165,7 @@ export class Dashboard extends Component {
             state: d.instituteAddress.State,
             country: d.instituteAddress.Country,
             gender: "",
-            profileImage: d.adminProfileImage,
+            profileImage: d.instituteProfileImage,
             email: d.instituteEmail,
             phone: d.institutePhoneNumber,
             id: d.instituteRegistrationID,

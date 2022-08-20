@@ -2,12 +2,13 @@ import React, { Component, useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import bsCustomFileInput from "bs-custom-file-input";
-import countryList from 'react-select-country-list'
+import countryList from "react-select-country-list";
 import validate from "./validator";
 import api from "../services/api";
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -16,22 +17,24 @@ export function StudentForm() {
   const [errorMessage, seterrorMessage] = React.useState("");
   const [errorState, seterrorState] = React.useState("error");
   let history = useHistory();
+  const [data, setData] = useState([]);
+  const [getcountry, setCountry] = useState([]);
+  const [getState, setState] = useState([]);
+  const [selectedState, setselectedState] = useState();
+  const [cities, setCities] = useState([]);
 
-
-
-  const options =  countryList().getData();
+  const options = countryList().getData();
   const countries = [];
-  for(var i = 0; i < options.length; i++){
-    countries.push(options[i].label)
+  for (var i = 0; i < options.length; i++) {
+    countries.push(options[i].label);
   }
-
 
   const handleClick = () => {
     setOpen(true);
   };
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
@@ -45,7 +48,7 @@ export function StudentForm() {
     createdBy: "rhAwejtzpSRt4Uw7mfeDP89R8NE2",
     studentClassID: "a0a226501c8611edb6e7953685d4d3e41660560006454",
     studentGender: "Male",
-    studentisHandicap:"No",
+    studentisHandicap: "No",
   });
   const [active, setActive] = useState({
     studentFirstName: "true",
@@ -60,25 +63,24 @@ export function StudentForm() {
     PinCode: "true",
     studentDOB: "true",
     Address: "true",
-    studentRollNumber:"true",
-    studentEnrollmentID:'true',
-    studentInstituteID:'true',
-    studentBMACAddress:'true',
-    studentCaste: 'true',
-    studentReligion: 'true',
-    studentisHandicap: 'true',
-    studentSSCmark: 'true',
-    studentHSCmark: 'true'
+    studentRollNumber: "true",
+    studentEnrollmentID: "true",
+    studentInstituteID: "true",
+    studentBMACAddress: "true",
+    studentCaste: "true",
+    studentReligion: "true",
+    studentisHandicap: "true",
+    studentSSCmark: "true",
+    studentHSCmark: "true",
   });
 
   const [error, setError] = useState(false);
 
   const handleSubmit = (e) => {
-
     e.preventDefault();
     // values
-    console.log('values: ', values);
-    
+    console.log("values: ", values);
+
     if (!shouldSubmit()) {
       e.preventDefault();
       setError(true);
@@ -99,54 +101,51 @@ export function StudentForm() {
       // var insituteID = localStorage.getItem("InstituteID")
       console.log(values);
       var form = {
-        studentFirstName :  values.studentFirstName,
-        studentMiddleName : values.studentMiddleName,
-        studentLastName :  values.studentLastName,
-        Address :  values.Address,
-        City :  values.City,
-        Taluka :  values.Taluka,
-        District :  values.District,
-        State :  values.State,
-        Country :  values.Country,
-        PinCode :  values.PinCode,
-        dobYear :  values.dobYear,
-        dobMonth :  values.dobMonth,
-        dobDate :  values.dobDate,
-        studentEmail :  values.studentEmail,
-        studentEnrollmentID :  values.studentEnrollmentID,
-        studentRollNumber :  values.studentRollNumber,
-        studentGender :  values.studentGender,
-        studentClassID :  values.studentClassID,
-        studentPhoneNumber :  values.studentPhoneNumber,
-        studentProfileImage :  values.studentProfileImage,
-        studentInstituteID :  localStorage.getItem("InstituteID"),
-        studentBloodGroup :  values.studentBloodGroup,
+        studentFirstName: values.studentFirstName,
+        studentMiddleName: values.studentMiddleName,
+        studentLastName: values.studentLastName,
+        Address: values.Address,
+        City: values.City,
+        Taluka: values.Taluka,
+        District: values.District,
+        State: values.State,
+        Country: values.Country,
+        PinCode: values.PinCode,
+        dobYear: values.dobYear,
+        dobMonth: values.dobMonth,
+        dobDate: values.dobDate,
+        studentEmail: values.studentEmail,
+        studentEnrollmentID: values.studentEnrollmentID,
+        studentRollNumber: values.studentRollNumber,
+        studentGender: values.studentGender,
+        studentClassID: values.studentClassID,
+        studentPhoneNumber: values.studentPhoneNumber,
+        studentProfileImage: values.studentProfileImage,
+        studentInstituteID: localStorage.getItem("InstituteID"),
+        studentBloodGroup: values.studentBloodGroup,
         // studentBMACAddress: "00:11:22:33:FF:EE",
-        studentBMACAddress:values.studentBMACAddress,
+        studentBMACAddress: values.studentBMACAddress,
         studentCaste: values.studentCaste,
         studentReligion: values.studentReligion,
         studentisHandicap: values.studentisHandicap,
         studentSSCmark: values.studentSSCmark,
         studentHSCmark: values.studentHSCmark,
-        createdBy :  "rhAwejtzpSRt4Uw7mfeDP89R8NE2" 
+        createdBy: "rhAwejtzpSRt4Uw7mfeDP89R8NE2",
+      };
+
+      api
+        .addStudent(form)
+        .then((response) => {
+          console.log(response);
+          setOpen(true);
+          seterrorMessage("Form submitted successfully");
+          seterrorState("success");
+        })
+        .catch((error) => {
+          console.log("Error Occured");
+        });
     }
-   
-      api.addStudent(form).then((response)=>{
-        console.log(response);
-        setOpen(true);
-        seterrorMessage("Form submitted successfully")
-        seterrorState("success")
-        
-
-      }).catch((error)=>{
-        console.log("Error Occured")
-      })
-
-    }
-
   };
-  
-
 
   const onChange = (e) => {
     setActive({ ...active, [e.target.name]: false });
@@ -187,7 +186,6 @@ export function StudentForm() {
   }
 
   function isPinCode(PinCode) {
-    
     if (!PinCode) {
       return 0;
     }
@@ -197,7 +195,7 @@ export function StudentForm() {
     return 0;
   }
 
-  function isRoll(Roll){
+  function isRoll(Roll) {
     if (!Roll) {
       return 0;
     }
@@ -205,121 +203,106 @@ export function StudentForm() {
       return 1;
     }
     return 0;
-
   }
 
-  function ValidateMarks(marks){
-    if(marks >= 0 && marks <= 100){
+  function ValidateMarks(marks) {
+    if (marks >= 0 && marks <= 100) {
       return true;
     }
     return false;
   }
 
   function shouldSubmit() {
-    if (!valName(values.studentFirstName) ){
-      setOpen(true)
-      seterrorMessage("First Name is empty")
-      seterrorState("error")
+    if (!valName(values.studentFirstName)) {
+      setOpen(true);
+      seterrorMessage("First Name is empty");
+      seterrorState("error");
       return false;
-    }
-    else if (!valName(values.studentLastName) ){
-      setOpen(true)
-      seterrorMessage("Last Name is empty")
-      seterrorState("error")
+    } else if (!valName(values.studentLastName)) {
+      setOpen(true);
+      seterrorMessage("Last Name is empty");
+      seterrorState("error");
       return false;
-    }
-    else if (!ValidateEmail(values.studentEmail) ){
-      setOpen(true)
-      seterrorMessage("Email is empty")
-      seterrorState("error")
+    } else if (!ValidateEmail(values.studentEmail)) {
+      setOpen(true);
+      seterrorMessage("Email is empty");
+      seterrorState("error");
       return false;
-    }
-    else if (!values.studentPhoneNumber ){
-      setOpen(true)
-      seterrorMessage("Phone number is empty")
-      seterrorState("error")
+    } else if (!values.studentPhoneNumber) {
+      setOpen(true);
+      seterrorMessage("Phone number is empty");
+      seterrorState("error");
       return false;
-    }
-    else if (!values.Address){
-      setOpen(true)
-      seterrorMessage("Address is empty")
-      seterrorState("error")
+    } else if (!values.Address) {
+      setOpen(true);
+      seterrorMessage("Address is empty");
+      seterrorState("error");
       return false;
-    }
-    else if (!values.studentEnrollmentID){
-      setOpen(true)
-      seterrorMessage("Enrollment ID is empty")
-      seterrorState("error")
+    } else if (!values.studentEnrollmentID) {
+      setOpen(true);
+      seterrorMessage("Enrollment ID is empty");
+      seterrorState("error");
       return false;
-    }
-    else if ( !values.studentDOB){
-      setOpen(true)
-      seterrorMessage("Date of Birth is empty")
-      seterrorState("error")
+    } else if (!values.studentDOB) {
+      setOpen(true);
+      seterrorMessage("Date of Birth is empty");
+      seterrorState("error");
       return false;
-    }
-    else if (!isPinCode(values.PinCode)){
-      setOpen(true)
-      seterrorMessage("Pincode is empty")
-      seterrorState("error")
+    } else if (!isPinCode(values.PinCode)) {
+      setOpen(true);
+      seterrorMessage("Pincode is empty");
+      seterrorState("error");
       return false;
-    }
-    else if (!values.District){
-      setOpen(true)
-      seterrorMessage("District is empty")
-      seterrorState("error")
+    } else if (!values.District) {
+      setOpen(true);
+      seterrorMessage("District is empty");
+      seterrorState("error");
       return false;
-    } else if ( !values.Taluka){
-      setOpen(true)
-      seterrorMessage("Taluka is empty")
-      seterrorState("error")
+    } else if (!values.Taluka) {
+      setOpen(true);
+      seterrorMessage("Taluka is empty");
+      seterrorState("error");
       return false;
-    }
-    else if (!values.City){
-      setOpen(true)
-      seterrorMessage("City is empty")
-      seterrorState("error")
+    } else if (!values.City) {
+      setOpen(true);
+      seterrorMessage("City is empty");
+      seterrorState("error");
       return false;
-    }
-    else if (!values.State){
-      setOpen(true)
-      seterrorMessage("State is empty")
-      seterrorState("error")
+    } else if (!values.State) {
+      setOpen(true);
+      seterrorMessage("State is empty");
+      seterrorState("error");
       return false;
-    }
-    else if (!values.Country){
-      setOpen(true)
-      seterrorMessage("Country is empty")
-      seterrorState("error")
+    } else if (!values.Country) {
+      setOpen(true);
+      seterrorMessage("Country is empty");
+      seterrorState("error");
       return false;
-    }else if(!values.studentCaste){
-      setOpen(true)
-      seterrorMessage("Please fill the caste section")
-      seterrorState("error")
+    } else if (!values.studentCaste) {
+      setOpen(true);
+      seterrorMessage("Please fill the caste section");
+      seterrorState("error");
       return false;
-    }else if(!values.studentReligion){
-      setOpen(true)
-      seterrorMessage("Please fill the religion section")
-      seterrorState("error")
+    } else if (!values.studentReligion) {
+      setOpen(true);
+      seterrorMessage("Please fill the religion section");
+      seterrorState("error");
       return false;
-
-    }else if(!values.studentSSCmark){
-      setOpen(true)
+    } else if (!values.studentSSCmark) {
+      setOpen(true);
       seterrorMessage("Please enter SSC marks");
-      seterrorState("error")
+      seterrorState("error");
       return false;
-
-    }else if(!values.studentHSCmark){
-      setOpen(true)
+    } else if (!values.studentHSCmark) {
+      setOpen(true);
       seterrorMessage("Please enter HSC marks");
       seterrorState("error");
       return false;
-
     }
     return true;
   }
 
-  console.log(values)
+  console.log(values);
 
   // console.log(shouldSubmit());
   // console.log(values)
@@ -493,48 +476,48 @@ export function StudentForm() {
         required: true,
         errormessage: "",
       },
-      studentBMACAddress:{
-        value:"",
-        placeholder:"BMAC Address",
-        valid:false,
-        required:true,
-        errormessage:"",
+      studentBMACAddress: {
+        value: "",
+        placeholder: "BMAC Address",
+        valid: false,
+        required: true,
+        errormessage: "",
       },
-      studentCaste:{
-        value:"",
-        placeholder:"Caste",
-        valid:false,
-        required:true,
-        errormessage:"",
+      studentCaste: {
+        value: "",
+        placeholder: "Caste",
+        valid: false,
+        required: true,
+        errormessage: "",
       },
-      studentReligion:{
-        value:"",
-        placeholder:"Religion",
-        valid:false,
-        required:true,
-        errormessage:"",
+      studentReligion: {
+        value: "",
+        placeholder: "Religion",
+        valid: false,
+        required: true,
+        errormessage: "",
       },
-      studentisHandicap:{
-        value:"",
-        placeholder:"Handicap Status",
-        valid:false,
-        required:true,
-        errormessage:"",
+      studentisHandicap: {
+        value: "",
+        placeholder: "Handicap Status",
+        valid: false,
+        required: true,
+        errormessage: "",
       },
-      studentSSCmark:{
-        value:"",
-        placeholder:"SSC mark",
-        valid:false,
-        required:true,
-        errormessage:"",
+      studentSSCmark: {
+        value: "",
+        placeholder: "SSC mark",
+        valid: false,
+        required: true,
+        errormessage: "",
       },
-      studentHSCmark:{
-        value:"",
-        placeholder:"HSC mark",
-        valid:false,
-        required:true,
-        errormessage:"",
-      }
+      studentHSCmark: {
+        value: "",
+        placeholder: "HSC mark",
+        valid: false,
+        required: true,
+        errormessage: "",
+      },
     },
   };
 
@@ -542,40 +525,75 @@ export function StudentForm() {
   // 'studentReligion': 'Hindu',
   // 'studentisHandicap': 'false',
   // 'studentSSCmark': '78',
-  // 'studentHSCmark': '96' 
-
+  // 'studentHSCmark': '96'
 
   useEffect(() => {
-    if(localStorage.getItem("setAuthority")=="3"){
-      api.viewInstituteByUUID(localStorage.getItem("InstituteUUID")).then((response)=>{
-        console.log('User is verified: DashBoard');
-  
-      }).catch((error)=>{
-          localStorage.clear()
-         history.push('/')
-      })
-    }else if(localStorage.getItem("setAuthority")=="1" ){
-      api.viewAdminByUUID(localStorage.getItem("UUID")).then((response)=>{
-        console.log('Admin is verified: DashBoard');
-  
-      }).catch((error)=>{
-          localStorage.clear()
-         history.push('/')
-      })
-    }else if(localStorage.getItem("setAuthority")=="2" ){
-      api.viewAuthorityByUUID(localStorage.getItem("UUID")).then((response)=>{
-        console.log('Auhtority is verified: DashBoard');
-  
-      }).catch((error)=>{
-          localStorage.clear()
-         history.push('/')
-      })
-    }else{
-      history.push('/')
+    if (localStorage.getItem("setAuthority") == "3") {
+      api
+        .viewInstituteByUUID(localStorage.getItem("InstituteUUID"))
+        .then((response) => {
+          console.log("User is verified: DashBoard");
+        })
+        .catch((error) => {
+          localStorage.clear();
+          history.push("/");
+        });
+    } else if (localStorage.getItem("setAuthority") == "1") {
+      api
+        .viewAdminByUUID(localStorage.getItem("UUID"))
+        .then((response) => {
+          console.log("Admin is verified: DashBoard");
+        })
+        .catch((error) => {
+          localStorage.clear();
+          history.push("/");
+        });
+    } else if (localStorage.getItem("setAuthority") == "2") {
+      api
+        .viewAuthorityByUUID(localStorage.getItem("UUID"))
+        .then((response) => {
+          console.log("Auhtority is verified: DashBoard");
+        })
+        .catch((error) => {
+          localStorage.clear();
+          history.push("/");
+        });
+    } else {
+      history.push("/");
     }
-    
+    axios
+      .get(
+        "https://pkgstore.datahub.io/core/world-cities/world-cities_json/data/5b3dd46ad10990bca47b04b4739a02ba/world-cities_json.json"
+      )
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     bsCustomFileInput.init();
   }, []);
+
+  const country = [...new Set(data.map((item) => item.country))];
+  const handleCountry = (e) => {
+    setActive({ ...active, [e.target.name]: false });
+    setValues({ ...values, [e.target.name]: e.target.value });
+    let states = data.filter((state) => state.country === e.target.value);
+    states = [...new Set(states.map((item) => item.subcountry))];
+    states.sort();
+    console.log(states);
+    setState(states);
+  };
+
+  const handleState = (e) => {
+    setActive({ ...active, [e.target.name]: false });
+    setValues({ ...values, [e.target.name]: e.target.value });
+    let cities = data.filter((city) => city.subcountry === e.target.value);
+    cities = [...new Set(cities.map((item) => item.name))];
+    cities.sort();
+    setCities(cities);
+  };
+  console.log(values);
 
   return (
     <div>
@@ -594,10 +612,13 @@ export function StudentForm() {
                         type="text"
                         id="studentFirstName"
                         name="studentFirstName"
-                        placeholder={state.formControls.studentFirstName.placeholder}
+                        placeholder={
+                          state.formControls.studentFirstName.placeholder
+                        }
                         onChange={onChange}
                       />
-                      {!valName(values.studentFirstName) && !active.studentFirstName ? (
+                      {!valName(values.studentFirstName) &&
+                      !active.studentFirstName ? (
                         <p style={{ fontSize: 10, color: "red" }}>
                           FirstName should be between 1 and 100 characters
                         </p>
@@ -613,11 +634,14 @@ export function StudentForm() {
                       <Form.Control
                         type="text"
                         id="exampleInputUsername1"
-                        placeholder={state.formControls.studentMiddleName.placeholder}
+                        placeholder={
+                          state.formControls.studentMiddleName.placeholder
+                        }
                         name="studentMiddleName"
                         onChange={onChange}
                       />
-                      {!valName(values.studentMiddleName) && !active.studentMiddleName ? (
+                      {!valName(values.studentMiddleName) &&
+                      !active.studentMiddleName ? (
                         <p style={{ fontSize: 10, color: "red" }}>
                           MiddleName should be between 1 and 100 characters
                         </p>
@@ -634,10 +658,13 @@ export function StudentForm() {
                         type="text"
                         id="studentLastName"
                         name="studentLastName"
-                        placeholder={state.formControls.studentLastName.placeholder}
+                        placeholder={
+                          state.formControls.studentLastName.placeholder
+                        }
                         onChange={onChange}
                       />
-                      {!valName(values.studentLastName) && !active.studentLastName ? (
+                      {!valName(values.studentLastName) &&
+                      !active.studentLastName ? (
                         <p style={{ fontSize: 10, color: "red" }}>
                           LastName should be between 1 and 100 characters
                         </p>
@@ -826,8 +853,12 @@ export function StudentForm() {
                           }
                           onChange={onChange}
                         >
-                          <option value="e3f2c6401c8511eda0e85904125eae4d1660559689893">TE03</option>
-                          <option value="a0a226501c8611edb6e7953685d4d3e41660560006454">TE04</option>
+                          <option value="e3f2c6401c8511eda0e85904125eae4d1660559689893">
+                            TE03
+                          </option>
+                          <option value="a0a226501c8611edb6e7953685d4d3e41660560006454">
+                            TE04
+                          </option>
                           {/* <option>C</option>
                           <option>D</option> */}
                         </select>
@@ -872,7 +903,7 @@ export function StudentForm() {
                     </Form.Group>
                   </div>
                 </div>
-                
+
                 <p className="card-description">Student Related Details</p>
 
                 <div className="row">
@@ -889,7 +920,6 @@ export function StudentForm() {
                           onChange={onChange}
                         />
                       </div>
-
                     </Form.Group>
                   </div>
                   <div className="col-md-6">
@@ -976,10 +1006,8 @@ export function StudentForm() {
                       )}
                     </Form.Group>
                   </div>
-                  
                 </div>
 
-                
                 <p className="card-description"> Address </p>
                 <div className="row">
                   <div className="col-md-6">
@@ -998,14 +1026,16 @@ export function StudentForm() {
                   <div className="col-md-6">
                     <Form.Group>
                       <label>City</label>
-                      <div>
-                        <Form.Control
-                          type="text"
-                          name="City"
-                          placeholder={state.formControls.City.placeholder}
-                          onChange={onChange}
-                        />
-                      </div>
+                      <select
+                        className="form-control"
+                        name="City"
+                        placeholder={state.formControls.City.placeholder}
+                        onChange={onChange}
+                      >
+                        {cities.map((values) => (
+                          <option key={values}>{values}</option>
+                        ))}
+                      </select>
                     </Form.Group>
                   </div>
                 </div>
@@ -1041,14 +1071,16 @@ export function StudentForm() {
                   <div className="col-md-6">
                     <Form.Group>
                       <label>State</label>
-                      <div>
-                        <Form.Control
-                          type="text"
-                          name="State"
-                          placeholder={state.formControls.State.placeholder}
-                          onChange={onChange}
-                        />
-                      </div>
+                      <select
+                        className="form-control"
+                        name="State"
+                        placeholder={state.formControls.State.placeholder}
+                        onChange={(e) => handleState(e)}
+                      >
+                        {getState.map((values) => (
+                          <option key={values}>{values}</option>
+                        ))}
+                      </select>
                     </Form.Group>
                   </div>
                   <div className="col-md-6">
@@ -1059,13 +1091,11 @@ export function StudentForm() {
                           className="form-control"
                           name="Country"
                           placeholder={state.formControls.Country.placeholder}
-                          onChange={onChange}
+                          onChange={handleCountry}
                         >
-                          {
-                            countries.map((values)=>(
-                              <option>{values}</option>
-                            ))
-                          }
+                          {country.map((values) => (
+                            <option key={values}>{values}</option>
+                          ))}
                         </select>
                       </div>
                     </Form.Group>
@@ -1103,7 +1133,7 @@ export function StudentForm() {
                         type="submit"
                         className="btn btn-primary mr-2 w-100"
                         onClick={handleSubmit}
-                        style={{height:"2.5rem", marginTop:"10%"}}
+                        style={{ height: "2.5rem", marginTop: "10%" }}
                       >
                         Submit
                       </button>
@@ -1116,8 +1146,10 @@ export function StudentForm() {
                   </div>
                   <div className="col-md-3">
                     <Form.Group>
-                      <button type="submit" className="btn btn-dark mr-2 w-100" 
-                      style={{height:"2.5rem",marginTop:"10%"}}
+                      <button
+                        type="submit"
+                        className="btn btn-dark mr-2 w-100"
+                        style={{ height: "2.5rem", marginTop: "10%" }}
                       >
                         Cancel
                       </button>
@@ -1131,7 +1163,11 @@ export function StudentForm() {
         </div>
       </div>
       <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={errorState} sx={{ width: '100%' }}>
+        <Alert
+          onClose={handleClose}
+          severity={errorState}
+          sx={{ width: "100%" }}
+        >
           {errorMessage}
         </Alert>
       </Snackbar>

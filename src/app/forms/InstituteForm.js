@@ -5,33 +5,37 @@ import bsCustomFileInput from "bs-custom-file-input";
 import { useHistory } from "react-router-dom";
 import validate from "./validator";
 import api from "../services/api";
-import Snackbar from '@mui/material/Snackbar';
-import axios from 'axios'
-import MuiAlert from '@mui/material/Alert';
-import countryList from 'react-select-country-list'
+import Snackbar from "@mui/material/Snackbar";
+import axios from "axios";
+import MuiAlert from "@mui/material/Alert";
+import countryList from "react-select-country-list";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-
 export function StudentForm() {
   const [open, setOpen] = React.useState(false);
   const [errorMessage, seterrorMessage] = React.useState("");
   const [errorState, seterrorState] = React.useState("error");
-  const options =  countryList().getData();
+  const options = countryList().getData();
+  const [data, setData] = useState([]);
+  const [getcountry, setCountry] = useState([]);
+  const [getState, setState] = useState([]);
+  const [selectedState , setselectedState] = useState();
+  const [cities , setCities] = useState([]);
+
   const countries = [];
-  for(var i = 0; i < options.length; i++){
-    countries.push(options[i].label)
+  for (var i = 0; i < options.length; i++) {
+    countries.push(options[i].label);
   }
 
- 
   const handleClick = () => {
     setOpen(true);
   };
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
@@ -40,8 +44,8 @@ export function StudentForm() {
 
   const [values, setValues] = useState({
     Country: "India",
-    instituteUUID : "NCLy8xUoPlaSugnqLlyXohU0Wei1",
-    createdBy : "admin",
+    instituteUUID: "NCLy8xUoPlaSugnqLlyXohU0Wei1",
+    createdBy: "admin",
   });
   const [active, setActive] = useState({
     instituteName: "true",
@@ -53,10 +57,10 @@ export function StudentForm() {
     District: "true",
     PinCode: "true",
     Address: "true",
-    instituteRegistrationID :"true",
-    instituteRegistration:'true',
-    studentInstituteID:'true',
-    instituteWebsite:'true'
+    instituteRegistrationID: "true",
+    instituteRegistration: "true",
+    studentInstituteID: "true",
+    instituteWebsite: "true",
   });
 
   const [error, setError] = useState(false);
@@ -69,7 +73,6 @@ export function StudentForm() {
       return;
     }
     if (shouldSubmit()) {
-    
       setError(false);
       console.log("Form is ready to be submitted");
       var pho = Number(values.institutePhoneNumber);
@@ -78,21 +81,19 @@ export function StudentForm() {
       values.PinCode = pincode;
       delete values.studentDOB;
       console.log(values);
-      api.addInstitute(values).then((response)=>{
-      console.log(response);
-      // alert("Success")
-      setOpen(true);
-      seterrorMessage("Form submitted successfully")
-      seterrorState("success")
-      
-    }).catch((error)=>{
-      console.log("Error Occured while submitting form")
-    })
-
+      api
+        .addInstitute(values)
+        .then((response) => {
+          console.log(response);
+          // alert("Success")
+          setOpen(true);
+          seterrorMessage("Form submitted successfully");
+          seterrorState("success");
+        })
+        .catch((error) => {
+          console.log("Error Occured while submitting form");
+        });
     }
-
-   
-    
   };
 
   const onChange = (e) => {
@@ -134,7 +135,6 @@ export function StudentForm() {
   }
 
   function isPinCode(PinCode) {
-    
     if (!PinCode) {
       return 0;
     }
@@ -144,7 +144,7 @@ export function StudentForm() {
     return 0;
   }
 
-  function isRoll(Roll){
+  function isRoll(Roll) {
     if (!Roll) {
       return 0;
     }
@@ -152,73 +152,66 @@ export function StudentForm() {
       return 1;
     }
     return 0;
-
   }
 
   function shouldSubmit() {
-    if (!valName(values.instituteName)){
-      setOpen(true)
-      seterrorMessage("Institute Name is empty")
-      seterrorState("error")
+    if (!valName(values.instituteName)) {
+      setOpen(true);
+      seterrorMessage("Institute Name is empty");
+      seterrorState("error");
       return false;
-    }else  if(!values.instituteWebsite){
-      setOpen(true)
-      seterrorMessage("Institute Website is empty")
-      seterrorState("error")
+    } else if (!values.instituteWebsite) {
+      setOpen(true);
+      seterrorMessage("Institute Website is empty");
+      seterrorState("error");
       return false;
-    }else  if(!values.instituteRegistrationID){
-      setOpen(true)
-      seterrorMessage("Institute Registration is empty")
-      seterrorState("error")
+    } else if (!values.instituteRegistrationID) {
+      setOpen(true);
+      seterrorMessage("Institute Registration is empty");
+      seterrorState("error");
       return false;
-    }
-    else  if(!ValidatePhone(values.institutePhoneNumber) ){
-      setOpen(true)
-      seterrorMessage("Institute Phone number is empty")
-      seterrorState("error")
+    } else if (!ValidatePhone(values.institutePhoneNumber)) {
+      setOpen(true);
+      seterrorMessage("Institute Phone number is empty");
+      seterrorState("error");
       return false;
-    }else  if(!ValidateEmail(values.instituteEmail) ){
-      setOpen(true)
-      seterrorMessage("Institute Email is empty")
-      seterrorState("error")
+    } else if (!ValidateEmail(values.instituteEmail)) {
+      setOpen(true);
+      seterrorMessage("Institute Email is empty");
+      seterrorState("error");
       return false;
-    }else if (!isPinCode(values.PinCode)){
-      setOpen(true)
-      seterrorMessage("Pincode is empty")
-      seterrorState("error")
+    } else if (!isPinCode(values.PinCode)) {
+      setOpen(true);
+      seterrorMessage("Pincode is empty");
+      seterrorState("error");
       return false;
-    }
-    else if (!values.District){
-      setOpen(true)
-      seterrorMessage("District is empty")
-      seterrorState("error")
+    } else if (!values.District) {
+      setOpen(true);
+      seterrorMessage("District is empty");
+      seterrorState("error");
       return false;
-    } else if ( !values.Taluka){
-      setOpen(true)
-      seterrorMessage("Taluka is empty")
-      seterrorState("error")
+    } else if (!values.Taluka) {
+      setOpen(true);
+      seterrorMessage("Taluka is empty");
+      seterrorState("error");
       return false;
-    }
-    else if (!values.City){
-      setOpen(true)
-      seterrorMessage("City is empty")
-      seterrorState("error")
+    } else if (!values.City) {
+      setOpen(true);
+      seterrorMessage("City is empty");
+      seterrorState("error");
       return false;
-    }
-    else if (!values.State){
-      setOpen(true)
-      seterrorMessage("State is empty")
-      seterrorState("error")
+    } else if (!values.State) {
+      setOpen(true);
+      seterrorMessage("State is empty");
+      seterrorState("error");
       return false;
-    }
-    else if (!values.Country){
-      setOpen(true)
-      seterrorMessage("Country is empty")
-      seterrorState("error")
+    } else if (!values.Country) {
+      setOpen(true);
+      seterrorMessage("Country is empty");
+      seterrorState("error");
       return false;
     }
 
-    
     return true;
     // console.log(values);
     // const form = {
@@ -234,12 +227,9 @@ export function StudentForm() {
     //   instituteEmail :  '',
     //   institutePhoneNumber :  '',
     //   instituteWebsite :  '',
-    //   instituteRegistrationID :  '' 
+    //   instituteRegistrationID :  ''
     // }
-
-    
   }
-
 
   const state = {
     startDate: new Date(),
@@ -252,7 +242,7 @@ export function StudentForm() {
         required: true,
         errormessage: "",
       },
-      instituteRegistrationID : {
+      instituteRegistrationID: {
         value: "",
         placeholder: "Institute Registration ID",
         valid: false,
@@ -347,51 +337,88 @@ export function StudentForm() {
         required: true,
         errormessage: "",
       },
-      instituteWebsite:{
-        value:"",
-        placeholder:"Institute Website",
-        valid:false,
-        required:true,
-        errormessage:"",
-      }
+      instituteWebsite: {
+        value: "",
+        placeholder: "Institute Website",
+        valid: false,
+        required: true,
+        errormessage: "",
+      },
     },
   };
 
   let history = useHistory();
-
+  console.log(cities);
   useEffect(() => {
-    if(localStorage.getItem("setAuthority")=="3"){
-      api.viewInstituteByUUID(localStorage.getItem("InstituteUUID")).then((response)=>{
-        console.log('User is verified: DashBoard');
-  
-      }).catch((error)=>{
-          localStorage.clear()
-         history.push('/')
-      })
-    }else if(localStorage.getItem("setAuthority")=="1" ){
-      api.viewAdminByUUID(localStorage.getItem("UUID")).then((response)=>{
-        console.log('Admin is verified: DashBoard');
-  
-      }).catch((error)=>{
-          localStorage.clear()
-         history.push('/')
-      })
-    }else if(localStorage.getItem("setAuthority")=="2" ){
-      api.viewAuthorityByUUID(localStorage.getItem("UUID")).then((response)=>{
-        console.log('Auhtority is verified: DashBoard');
-  
-      }).catch((error)=>{
-          localStorage.clear()
-         history.push('/')
-      })
-    }else{
-      history.push('/')
+    if (localStorage.getItem("setAuthority") == "3") {
+      api
+        .viewInstituteByUUID(localStorage.getItem("InstituteUUID"))
+        .then((response) => {
+          console.log("User is verified: DashBoard");
+        })
+        .catch((error) => {
+          localStorage.clear();
+          history.push("/");
+        });
+    } else if (localStorage.getItem("setAuthority") == "1") {
+      api
+        .viewAdminByUUID(localStorage.getItem("UUID"))
+        .then((response) => {
+          console.log("Admin is verified: DashBoard");
+        })
+        .catch((error) => {
+          localStorage.clear();
+          history.push("/");
+        });
+    } else if (localStorage.getItem("setAuthority") == "2") {
+      api
+        .viewAuthorityByUUID(localStorage.getItem("UUID"))
+        .then((response) => {
+          console.log("Auhtority is verified: DashBoard");
+        })
+        .catch((error) => {
+          localStorage.clear();
+          history.push("/");
+        });
+    } else {
+      history.push("/");
     }
 
-
+    axios
+      .get(
+        "https://pkgstore.datahub.io/core/world-cities/world-cities_json/data/5b3dd46ad10990bca47b04b4739a02ba/world-cities_json.json"
+      )
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     bsCustomFileInput.init();
   }, []);
 
+  const handleCountry = (e) => {
+    setActive({ ...active, [e.target.name]: false });
+    setValues({ ...values, [e.target.name]: e.target.value });
+    let states = data.filter((state) => state.country === e.target.value);
+    states = [...new Set(states.map((item) => item.subcountry))];
+    states.sort();
+    console.log(states);
+    setState(states);
+  };
+
+  const handleState = (e) => {
+    setActive({ ...active, [e.target.name]: false });
+    setValues({ ...values, [e.target.name]: e.target.value });
+    let cities = data.filter((city) => city.subcountry === e.target.value);
+    cities = [...new Set(cities.map((item) => item.name))]
+    cities.sort();
+    setCities(cities);
+  }
+
+  const country = [...new Set(data.map((item) => item.country))];
+  console.log(values);
+  console.log(getcountry);
   return (
     <div>
       <div className="row">
@@ -409,10 +436,13 @@ export function StudentForm() {
                         type="text"
                         id="instituteName"
                         name="instituteName"
-                        placeholder={state.formControls.instituteName.placeholder}
+                        placeholder={
+                          state.formControls.instituteName.placeholder
+                        }
                         onChange={onChange}
                       />
-                      {!valName(values.instituteName) && !active.instituteName ? (
+                      {!valName(values.instituteName) &&
+                      !active.instituteName ? (
                         <p style={{ fontSize: 10, color: "red" }}>
                           FirstName should be between 2 and 30 characters
                         </p>
@@ -431,7 +461,7 @@ export function StudentForm() {
                           placeholder={
                             state.formControls.instituteWebsite.placeholder
                           }
-                          onChange={onChange}
+                          onChange={(e) => handleCountry(e)}
                         />
                       </div>
                     </Form.Group>
@@ -446,7 +476,10 @@ export function StudentForm() {
                         <Form.Control
                           type="text"
                           name="instituteRegistrationID"
-                          placeholder={state.formControls.instituteRegistrationID.placeholder}
+                          placeholder={
+                            state.formControls.instituteRegistrationID
+                              .placeholder
+                          }
                           onChange={onChange}
                         />
                       </div>
@@ -454,7 +487,6 @@ export function StudentForm() {
                   </div>
                 </div>
                 <div className="row">
-
                   <div className="col-md-6">
                     <Form.Group>
                       <label>Email</label>
@@ -504,8 +536,6 @@ export function StudentForm() {
                       )}
                     </Form.Group>
                   </div>
-                  
-                  
                 </div>
 
                 <p className="card-description"> Address </p>
@@ -526,14 +556,16 @@ export function StudentForm() {
                   <div className="col-md-6">
                     <Form.Group>
                       <label>City</label>
-                      <div>
-                        <Form.Control
-                          type="text"
-                          name="City"
-                          placeholder={state.formControls.City.placeholder}
-                          onChange={onChange}
-                        />
-                      </div>
+                      <select
+                        className="form-control"
+                        name="City"
+                        placeholder={state.formControls.City.placeholder}
+                        onChange={onChange}
+                      >
+                        {cities.map((values) => (
+                          <option key = {values}>{values}</option>
+                        ))}
+                      </select>
                     </Form.Group>
                   </div>
                 </div>
@@ -569,14 +601,16 @@ export function StudentForm() {
                   <div className="col-md-6">
                     <Form.Group>
                       <label>State</label>
-                      <div>
-                        <Form.Control
-                          type="text"
-                          name="State"
-                          placeholder={state.formControls.State.placeholder}
-                          onChange={onChange}
-                        />
-                      </div>
+                      <select
+                        className="form-control"
+                        name="State"
+                        placeholder={state.formControls.State.placeholder}
+                        onChange={(e) => handleState(e)}
+                      >
+                        {getState.map((values) => (
+                          <option key = {values}>{values}</option>
+                        ))}
+                      </select>
                     </Form.Group>
                   </div>
                   <div className="col-md-6">
@@ -587,13 +621,11 @@ export function StudentForm() {
                           className="form-control"
                           name="Country"
                           placeholder={state.formControls.Country.placeholder}
-                          onChange={onChange}
+                          onChange={handleCountry}
                         >
-                          {
-                            countries.map((values)=>(
-                              <option>{values}</option>
-                            ))
-                          }
+                          {country.map((values) => (
+                            <option key = {values}>{values}</option>
+                          ))}
                         </select>
                       </div>
                     </Form.Group>
@@ -631,7 +663,7 @@ export function StudentForm() {
                         type="submit"
                         className="btn btn-primary mr-2 w-100"
                         onClick={handleSubmit}
-                        style={{height:"2.5rem", marginTop:"10%"}}
+                        style={{ height: "2.5rem", marginTop: "10%" }}
                       >
                         Submit
                       </button>
@@ -644,7 +676,11 @@ export function StudentForm() {
                   </div>
                   <div className="col-md-3">
                     <Form.Group>
-                      <button type="submit" className="btn btn-dark mr-2 w-100" style={{height:"2.5rem", marginTop:"10%"}}>
+                      <button
+                        type="submit"
+                        className="btn btn-dark mr-2 w-100"
+                        style={{ height: "2.5rem", marginTop: "10%" }}
+                      >
                         Cancel
                       </button>
                     </Form.Group>
@@ -657,7 +693,11 @@ export function StudentForm() {
         </div>
       </div>
       <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={errorState} sx={{ width: '100%' }}>
+        <Alert
+          onClose={handleClose}
+          severity={errorState}
+          sx={{ width: "100%" }}
+        >
           {errorMessage}
         </Alert>
       </Snackbar>

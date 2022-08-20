@@ -79,8 +79,7 @@ export function BasicElements() {
 
   let history = useHistory();
   useEffect(() => {
-    // setCols(columns);
-    // setRows(rows);
+
     if(localStorage.getItem("setAuthority")=="3"){
       api.viewInstituteByUUID(localStorage.getItem("InstituteUUID")).then((response)=>{
         console.log('User is verified: DashBoard');

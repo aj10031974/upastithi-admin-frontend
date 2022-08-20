@@ -4,7 +4,7 @@ import axios from "axios";
 import { Grid } from "react-loader-spinner";
 import api from "../services/api";
 import StudentData from '../view-tables/StudentData'
-
+import IndianMap from './IndianMap'
 export class ChartJs extends Component {
   data = {
     labels: ["2013", "2014", "2014", "2015", "2016", "2017"],
@@ -490,6 +490,8 @@ export class ChartJs extends Component {
               </div>
             </div>
           </div>
+         
+        {/* </div> */}
           <div className="col-md-6 grid-margin stretch-card">
             <div className="card">
               <div className="card-body">
@@ -504,7 +506,7 @@ export class ChartJs extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-md-6 grid-margin stretch-card">
+          {/* <div className="col-md-6 grid-margin stretch-card">
             <div className="card">
               <div className="card-body">
                 <h4 className="card-title">StateWise Students</h4>
@@ -515,8 +517,19 @@ export class ChartJs extends Component {
                 )}
               </div>
             </div>
+          </div> */}
+ <div className="col-md-6 grid-margin stretch-card">
+            <div className="card">
+              <div className="card-body">
+                <h4 className="card-title">StateWise Scholarship eligible Students</h4>
+                {this.state.isFetching ? (
+                  <Grid color="#00BFFF" height={40} width={40} />
+                ) : (
+                  <Bar data={statewisescholarshipEligible} options={this.areaOptions} />
+                )}
+              </div>
+            </div>
           </div>
-
           <div className="col-md-6 grid-margin stretch-card">
             <div className="card">
               <div className="card-body">
@@ -533,7 +546,7 @@ export class ChartJs extends Component {
         </div>
 
         <div className="row">
-          <div className="col-md-6 grid-margin stretch-card">
+          {/* <div className="col-md-6 grid-margin stretch-card">
             <div className="card">
               <div className="card-body">
                 <h4 className="card-title">StateWise Scholarship eligible Students</h4>
@@ -544,11 +557,23 @@ export class ChartJs extends Component {
                 )}
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
+         {/* <div className="col-md-6 grid-margin stretch-card">
+            <div className="card">
+              <div className="card-body">
+                <h4 className="card-title">Scholarship Eligible Students</h4>
+                {this.state.isFetching ? (
+                  <Grid color="#00BFFF" height={40} width={40} />
+                ) : (
+                  <IndianMap/>
+                )}
+              </div>
+            </div>
+          </div> */}
 
         <br></br>
-        <StudentData/>
+        {/* <StudentData/> */}
       </div>
     );
   }

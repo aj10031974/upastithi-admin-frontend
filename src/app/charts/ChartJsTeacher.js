@@ -505,7 +505,7 @@ export class ChartJs extends Component {
             </div>
           </div>
         </div>
-        <TeacherData/>
+        {/* <TeacherData/> */}
       </div>
     );
   }

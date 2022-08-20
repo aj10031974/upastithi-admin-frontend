@@ -165,9 +165,12 @@ export function TeacherForm() {
           <div className="card" >
             <div className="card-body">
               <h4 className="card-title">Student Registration</h4>
+              <h6 className="text-muted font-weight-normal">
+                 For greater number of student registrations, please provide the details in the following format as given in the template.<a href="https://firebasestorage.googleapis.com/v0/b/upastithi-01.appspot.com/o/ugly-3.csv?alt=media&token=1760dbbf-d181-4545-975a-ccc0de78fe11"> Download Template</a>
+                </h6>
               
                <Form.Group>
-                      <label>Upload File </label>
+                     
                       <div className="custom-file">
                         <Form.Control
                           type="file"

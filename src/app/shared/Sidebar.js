@@ -153,7 +153,7 @@ class Sidebar extends Component {
                     
                     <li className="nav-item"> <Link className={ this.isPathActive('/view/InstituteData') ? 'nav-link active' : 'nav-link' } to="/view/InstituteData"><Trans>Institute Data</Trans></Link></li>
                     <li className="nav-item"> <Link className={ this.isPathActive('/view/ScholarshipData') ? 'nav-link active' : 'nav-link' } to="/view/ScholarshipData"><Trans>Scholarship Data</Trans></Link></li>
-                    <li className="nav-item"> <Link className={ this.isPathActive('/view/ClassData') ? 'nav-link active' : 'nav-link' } to="/view/ClassData"><Trans>ClassData Data</Trans></Link></li>
+                    <li className="nav-item"> <Link className={ this.isPathActive('/view/ClassData') ? 'nav-link active' : 'nav-link' } to="/view/ClassData"><Trans>Class Data</Trans></Link></li>
                     <li className="nav-item"> <Link className={ this.isPathActive('/view/SubjectData') ? 'nav-link active' : 'nav-link' } to="/view/SubjectData"><Trans>Subject Data</Trans></Link></li>
                     </>
                     
@@ -175,7 +175,7 @@ class Sidebar extends Component {
                     <li className="nav-item"> <Link className={ this.isPathActive('/view/Studentdata') ? 'nav-link active' : 'nav-link' } to="/view/Studentdata"><Trans>Student Data</Trans></Link></li>
                     
                     <li className="nav-item"> <Link className={ this.isPathActive('/view/ScholarshipData') ? 'nav-link active' : 'nav-link' } to="/view/ScholarshipData"><Trans>Scholarship Data</Trans></Link></li>
-                    <li className="nav-item"> <Link className={ this.isPathActive('/view/ClassData') ? 'nav-link active' : 'nav-link' } to="/view/ClassData"><Trans>ClassData Data</Trans></Link></li>
+                    <li className="nav-item"> <Link className={ this.isPathActive('/view/ClassData') ? 'nav-link active' : 'nav-link' } to="/view/ClassData"><Trans>Class Data</Trans></Link></li>
                     <li className="nav-item"> <Link className={ this.isPathActive('/view/SubjectData') ? 'nav-link active' : 'nav-link' } to="/view/SubjectData"><Trans>Subject Data</Trans></Link></li>
                     </>:
                     <></>
@@ -217,7 +217,7 @@ class Sidebar extends Component {
           </li>:<></>
           }
 
-
+{/* 
 <li className={ this.isPathActive('/chart') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
             <div className={ this.state.viewChartOpen ? 'nav-link menu-expanded' : 'nav-link' } onClick={ () => this.toggleMenuState('viewChartOpen') } data-toggle="collapse">
               <span className="menu-icon">
@@ -248,7 +248,7 @@ class Sidebar extends Component {
                 </ul>
               </div>
             </Collapse>
-          </li>
+          </li> */}
 
 {/*        
           <li className={ this.isPathActive('/basic-ui') ? 'nav-item menu-items active' : 'nav-item menu-items' }>

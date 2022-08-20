@@ -39,34 +39,30 @@ export class TodoListComponent extends Component {
             todos: [
                 {
                     id: 1,
-                    task: 'Pick up kids from school',
+                    task: 'View Reports',
                     isCompleted: false
                 },
                 {
                     id: 2,
-                    task: 'Prepare for presentation',
+                    task: 'Disburse College Fund',
                     isCompleted: true
                 },
                 {
                     id: 3,
-                    task: 'Print Statements',
+                    task: 'Attend Meeting',
                     isCompleted: false
                 },
                 {
                     id: 4,
-                    task: 'Create invoice',
+                    task: 'Call Director',
                     isCompleted: false
                 },
                 {
                     id: 5,
-                    task: 'Call John',
+                    task: 'Review Student Data',
                     isCompleted: true
                 },
-                {
-                    id: 6,
-                    task: 'Meeting with Alisa',
-                    isCompleted: false
-                }
+              
             ],
             inputValue: '',
         }
