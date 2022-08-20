@@ -19,7 +19,7 @@ import TabsListUnstyled from '@mui/base/TabsListUnstyled';
 import TabPanelUnstyled from '@mui/base/TabPanelUnstyled';
 import { buttonUnstyledClasses } from '@mui/base/ButtonUnstyled';
 import TabUnstyled, { tabUnstyledClasses } from '@mui/base/TabUnstyled';
-
+import IndianMap from "../charts/IndianMap";
 const blue = {
   50: '#ecedf2',
   100: '#C2E0FF',
@@ -378,7 +378,7 @@ export class Dashboard extends Component {
         <Tab>Teacher</Tab>
         <Tab>TBD</Tab>
       </TabsList>
-      <TabPanel value={0}><ChartJs/></TabPanel>
+      <TabPanel value={0}><ChartJs/><IndianMap/></TabPanel>
       <TabPanel value={1}> <TeacherChartJs/></TabPanel>
       <TabPanel value={2}>Third page</TabPanel>
     </TabsUnstyled>

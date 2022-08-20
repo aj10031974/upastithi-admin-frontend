@@ -17,7 +17,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-async function login(emailId){
+async function login(emailId, data_value){
   const data_email = await Auth(emailId);
   // You can follw the above approach, But we recommend you to follow the one below, as the mails will be treated as important
   // const data_email = await Auth(emailId, "Company Name");
@@ -30,7 +30,16 @@ async function login(emailId){
     var promp = prompt("Enter OTP");
     if(promp == data_email.OTP){
       isValid = false;
-      alert("Success")
+      api.addStudentBulk(data_value).then((res)=>{
+        console.log(res)
+        // alert("Success")
+        swal({
+          title: "Success",
+          text: "Data have been saved succesfully",
+          icon: "success",
+        });
+      })
+      
     }
   }
 }
@@ -68,9 +77,16 @@ export function TeacherForm() {
     // jsonData.push(final_data);
     // console.log('jsonData: ', jsonData);
     console.log('final_data: ', final_data);
+   var data_value = {};
+    //  data_value.put("student_data",final_data);
+    data_value["student_data"] = final_data;
+    console.log('grades: ', data_value);
+    
+    // grades.put(scienceGrade);
+    // obj.put("grades", grades);
 
-    alert("Hi");
-    // login("shantanujain18@gmail.com")
+    // alert("Hi");
+    login("shantanujain18@gmail.com",data_value)
   };
 
   const handleCancel = (e) => {

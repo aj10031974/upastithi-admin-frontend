@@ -50,7 +50,7 @@ const Login = lazy(() => import('./user-pages/Login'));
 const Register1 = lazy(() => import('./user-pages/Register'));
 
 const Profile = lazy(() => import('./profile/Dashboard'));
-
+const IndianMap = lazy(() => import('./charts/IndianMap'));
 class AppRoutes extends Component {
   render () {
     return (
@@ -64,6 +64,8 @@ class AppRoutes extends Component {
           <Route exact path="/view/studentdata" component={ StudentViewData } />
           <Route exact path="/view/instituteData" component={ InsitututeData } />
           <Route exact path="/view/ScholarshipData" component={ ScholarshipData } />
+          
+          <Route exact path="/chart/IndianMap" component={ IndianMap } />
           
           <Route exact path="/view/ClassData" component={ ClassData } />
           

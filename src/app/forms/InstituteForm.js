@@ -6,16 +6,26 @@ import { useHistory } from "react-router-dom";
 import validate from "./validator";
 import api from "../services/api";
 import Snackbar from '@mui/material/Snackbar';
+import axios from 'axios'
 import MuiAlert from '@mui/material/Alert';
+import countryList from 'react-select-country-list'
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
+
+
 export function StudentForm() {
   const [open, setOpen] = React.useState(false);
   const [errorMessage, seterrorMessage] = React.useState("");
   const [errorState, seterrorState] = React.useState("error");
+  const options =  countryList().getData();
+  const countries = [];
+  for(var i = 0; i < options.length; i++){
+    countries.push(options[i].label)
+  }
 
+ 
   const handleClick = () => {
     setOpen(true);
   };
@@ -377,7 +387,8 @@ export function StudentForm() {
     }else{
       history.push('/')
     }
-    
+
+
     bsCustomFileInput.init();
   }, []);
 
@@ -578,10 +589,11 @@ export function StudentForm() {
                           placeholder={state.formControls.Country.placeholder}
                           onChange={onChange}
                         >
-                          <option>India</option>
-                          <option>Italy</option>
-                          <option>Russia</option>
-                          <option>Britain</option>
+                          {
+                            countries.map((values)=>(
+                              <option>{values}</option>
+                            ))
+                          }
                         </select>
                       </div>
                     </Form.Group>

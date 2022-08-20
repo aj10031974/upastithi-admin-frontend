@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import bsCustomFileInput from "bs-custom-file-input";
-
+import countryList from 'react-select-country-list'
 import validate from "./validator";
 import api from "../services/api";
 import Snackbar from '@mui/material/Snackbar';
@@ -16,6 +16,15 @@ export function StudentForm() {
   const [errorMessage, seterrorMessage] = React.useState("");
   const [errorState, seterrorState] = React.useState("error");
   let history = useHistory();
+
+
+
+  const options =  countryList().getData();
+  const countries = [];
+  for(var i = 0; i < options.length; i++){
+    countries.push(options[i].label)
+  }
+
 
   const handleClick = () => {
     setOpen(true);
@@ -1052,10 +1061,11 @@ export function StudentForm() {
                           placeholder={state.formControls.Country.placeholder}
                           onChange={onChange}
                         >
-                          <option>India</option>
-                          <option>Italy</option>
-                          <option>Russia</option>
-                          <option>Britain</option>
+                          {
+                            countries.map((values)=>(
+                              <option>{values}</option>
+                            ))
+                          }
                         </select>
                       </div>
                     </Form.Group>

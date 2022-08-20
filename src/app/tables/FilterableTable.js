@@ -80,11 +80,11 @@ export default function DataTable({ row, cols }) {
           loading={false}
           autoPageSize={true}
           components={{ Toolbar: GridToolbar }}
-          filterModel={{
-            items: [
-              { columnField: 'name', operatorValue: 'contains', value: 'Tanvesh' },
-            ],
-          }}
+          // filterModel={{
+          //   items: [
+          //     { columnField: 'name', operatorValue: 'contains', value: 'Tanvesh' },
+          //   ],
+          // }}
           // disableSelectionOnClick
           // experimentalFeatures={{ newEditingApi: true }}
         />

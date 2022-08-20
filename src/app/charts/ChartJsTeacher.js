@@ -3,6 +3,7 @@ import { Line, Bar, Doughnut, Pie, Scatter } from "react-chartjs-2";
 import axios from "axios";
 import { Grid } from "react-loader-spinner";
 import api from "../services/api";
+import TeacherData from '../view-tables/TeacherData'
 
 export class ChartJs extends Component {
   data = {
@@ -182,6 +183,18 @@ export class ChartJs extends Component {
 
     total.push(response.data.message.totalScholarshipEligibleStudent);
     total.push(response.data.message.totalScholarshipNonEligibleStudent);
+    console.log(response.data.message)
+    const stateElig = Object.keys(
+      response.data.message.stateWiseNonEligibleCount
+    );
+
+    const stateNonEligValues = Object.values(
+      response.data.message.stateWiseNonEligibleCount
+    )
+    
+    const stateEligValues = Object.values(
+      response.data.message.stateWiseEligibleCount
+    )
 
     const states_students = Object.keys(
       response.data.message.stateWiseStudentCount
@@ -189,10 +202,14 @@ export class ChartJs extends Component {
     const state_students_cnt = Object.values(
       response.data.message.stateWiseStudentCount
     );
+
     this.setState({ students: arr, isFetching: false });
     this.setState({ schlorShipElig: sch, isFetching: false });
     this.setState({ schlorShipNonElig: v, isFetching: false });
     this.setState({ total: total, isFetching: false });
+    this.setState({stateElig:stateElig , isFetching:false});
+    this.setState({stateNonEligValues:stateNonEligValues , isFetching:false})
+    this.setState({stateEligValues:stateEligValues , isFetching :false});
 
     this.setState({
       statewiseStudents: states_students,
@@ -264,16 +281,18 @@ export class ChartJs extends Component {
         {
           data: this.state.data,
           backgroundColor: [
-            "rgba(255, 99, 132, 0.5)",
             "rgba(54, 162, 235, 0.5)",
+            "rgba(255, 99, 132, 0.5)",
+            
             "rgba(255, 206, 86, 0.5)",
             "rgba(75, 192, 192, 0.5)",
             "rgba(153, 102, 255, 0.5)",
             "rgba(255, 159, 64, 0.5)",
           ],
           borderColor: [
-            "rgba(255,99,132,1)",
             "rgba(54, 162, 235, 1)",
+            "rgba(255,99,132,1)",
+            
             "rgba(255, 206, 86, 1)",
             "rgba(75, 192, 192, 1)",
             "rgba(153, 102, 255, 1)",
@@ -291,12 +310,13 @@ export class ChartJs extends Component {
           data: this.state.students,
           backgroundColor: [
             "rgba(54, 162, 235, 0.5)",
-            "rgba(255, 99, 132, 0.5)",
-
+            "rgba(255, 26, 140, 0.3)",
             "rgba(255, 206, 86, 0.5)",
             "rgba(75, 192, 192, 0.5)",
             "rgba(153, 102, 255, 0.5)",
             "rgba(255, 159, 64, 0.5)",
+            
+            
           ],
           borderColor: [
             "rgba(54, 162, 235, 1)",
@@ -305,6 +325,7 @@ export class ChartJs extends Component {
             "rgba(75, 192, 192, 1)",
             "rgba(153, 102, 255, 1)",
             "rgba(255, 159, 64, 1)",
+    
           ],
         },
       ],
@@ -317,16 +338,16 @@ export class ChartJs extends Component {
         {
           data: this.state.total,
           backgroundColor: [
-            "rgba(255, 99, 132, 0.5)",
-            "rgba(54, 162, 235, 0.5)",
+            "rgba(250, 2, 2, 0.3)",
+            "rgba(12, 232, 70, 0.4)",
             "rgba(255, 206, 86, 0.5)",
             "rgba(75, 192, 192, 0.5)",
             "rgba(153, 102, 255, 0.5)",
             "rgba(255, 159, 64, 0.5)",
           ],
           borderColor: [
-            "rgba(255,99,132,1)",
-            "rgba(54, 162, 235, 1)",
+            "red",
+            "rgba(3, 252, 86)",
             "rgba(255, 206, 86, 1)",
             "rgba(75, 192, 192, 1)",
             "rgba(153, 102, 255, 1)",
@@ -348,13 +369,38 @@ export class ChartJs extends Component {
           stack:'Stack 0',
           label: "Non Eligible",
           data: this.state.schlorShipElig,
-          backgroundColor:'blue'
+          backgroundColor:'rgba(250, 2, 2, 0.5)'
         },
         {
           stack:'Stack 0',
           label: "Eligible",
           data: this.state.schlorShipNonElig,
-          backgroundColor:'red'
+          backgroundColor:'rgba(12, 232, 70, 0.4)'
+        },
+
+        
+      ],
+   
+      // These labels appear in the legend and in the tooltips when hovering different arcs
+    };
+
+    console.log(this.state.stateNonEligValues , this.state.stateEligValues , this.state.stateElig)
+    const statewisescholarshipEligible = {
+      labels: this.state.stateElig,
+
+      datasets: [
+        {
+          stack:'Stack 0',
+          label: "Non Eligible",
+          data: this.state.stateNonEligValues,
+          backgroundColor:"rgba(250, 2, 2, 0.5)",
+          
+        },
+        {
+          stack:'Stack 0',
+          label: "Eligible",
+          data: this.state.stateEligValues,
+          backgroundColor: "rgba(12, 232, 70, 0.4)"
         },
 
         
@@ -378,7 +424,7 @@ export class ChartJs extends Component {
           label: "No. of Teachers",
           data: this.state.state_teacher_count,
           backgroundColor: [
-            "rgba(255, 99, 132, 0.2)",
+            "rgba(12, 232, 70, 0.4)",
             "rgba(54, 162, 235, 0.2)",
             "rgba(255, 206, 86, 0.2)",
             "rgba(75, 192, 192, 0.2)",
@@ -386,7 +432,7 @@ export class ChartJs extends Component {
             "rgba(255, 159, 64, 0.2)",
           ],
           borderColor: [
-            "rgba(255,99,132,1)",
+            "rgba(12, 232, 70, 0.4)",
             "rgba(54, 162, 235, 1)",
             "rgba(255, 206, 86, 1)",
             "rgba(75, 192, 192, 1)",
@@ -429,96 +475,14 @@ export class ChartJs extends Component {
 
     return (
       <div>
-        <div className="page-header">
-          {/* <h3 className="page-title">Dashboard and Analysis</h3> */}
-          {/* <nav aria-label="breadcrumb">
-            <ol className="breadcrumb">
-              <li className="breadcrumb-item">
-                <a href="!#" onClick={(event) => event.preventDefault()}>
-                  DashBoard
-                </a>
-              </li>
-              <li className="breadcrumb-item active" aria-current="page">
-                DashBoard
-              </li>
-            </ol>
-          </nav> */}
-        </div>
-        {/* <hr></hr>
-        <h4 className="page-title">Students</h4>
-        <hr></hr> */}
-        {/* <div className="row">
-          <div className="col-md-6 grid-margin stretch-card">
-            <div className="card">
-              <div className="card-body">
-                <h4 className="card-title">Student Gender Ratio</h4>
-                {this.state.isFetching ? (
-                  // <Grid color="#00BFFF" height={40} width={40} />
-                  <Doughnut data={studentData} options={doughnutPieOptions} />
-                ) : (
-                  <Doughnut data={studentData} options={doughnutPieOptions} />
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6 grid-margin stretch-card">
-            <div className="card">
-              <div className="card-body">
-                <h4 className="card-title">Scholarship Eligible Students</h4>
-                {this.state.isFetching ? (
-                  <Pie data={scholarship} options={doughnutPieOptions} />
-                ) : (
-                  <Pie data={scholarship} options={doughnutPieOptions} />
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-6 grid-margin stretch-card">
-            <div className="card">
-              <div className="card-body">
-                <h4 className="card-title">StateWise Students</h4>
-                {this.state.isFetching ? (
-                  // <Grid color="#00BFFF" height={40} width={40} />
-                  <Bar data={StatewiseStudents} options={this.areaOptions} />
-                ) : (
-                  <Bar data={StatewiseStudents} options={this.areaOptions} />
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="col-md-6 grid-margin stretch-card">
-            <div className="card">
-              <div className="card-body">
-                <h4 className="card-title">Male/Female Eligible</h4>
-                {this.state.isFetching ? (
-                  <Grid color="#00BFFF" height={40} width={40} />
-                ) : (
-                  // <Bar data={StatewiseStudents} options={this.areaOptions} />
-                  <Bar data={scholarshipEligible} options={this.areaOptions} />
-                )}
-              </div>
-            </div>
-          </div>
-        </div> */}
-
         {/* ####################    TEACHERS    ################## */}
-        <hr></hr>
-        <h4 className="page-title">Teachers</h4>
-        <hr></hr>
         <div className="row">
           <div className="col-md-6 grid-margin stretch-card">
             <div className="card">
               <div className="card-body">
                 <h4 className="card-title">Total Teachers</h4>
                 {this.state.isFetching ? (
-                  // <Grid color="#00BFFF" height={40} width={40} />
-                  <Doughnut
-                    data={doughnutPieData}
-                    options={doughnutPieOptions}
-                  />
+                  <Grid color="#00BFFF" height={40} width={40} />
                 ) : (
                   <Doughnut
                     data={doughnutPieData}
@@ -533,8 +497,7 @@ export class ChartJs extends Component {
               <div className="card-body">
                 <h4 className="card-title">StateWise Teachers</h4>
                 {this.state.isFetching ? (
-                  // <Grid color="#00BFFF" height={40} width={40} />
-                  <Bar data={StatewiseTeachers} options={this.areaOptions} />
+                  <Grid color="#00BFFF" height={40} width={40} />
                 ) : (
                   <Bar data={StatewiseTeachers} options={this.areaOptions} />
                 )}
@@ -542,6 +505,7 @@ export class ChartJs extends Component {
             </div>
           </div>
         </div>
+        <TeacherData/>
       </div>
     );
   }

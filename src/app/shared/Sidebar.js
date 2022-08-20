@@ -43,7 +43,7 @@ class Sidebar extends Component {
       
       {path:'/view', state: 'viewElementsMenuOpen'},
       // {path:'/StudentForm', state: 'StudentformElementsMenuOpen'},
-
+      {path:'/chart', state: 'viewChartOpen'},
       {path:'/tables', state: 'tablesMenuOpen'},
       {path:'/icons', state: 'iconsMenuOpen'},
       {path:'/charts', state: 'chartsMenuOpen'},
@@ -70,7 +70,8 @@ class Sidebar extends Component {
             </a>
           <a className="sidebar-brand brand-logo-mini" href="/dashboard"> <span style={{color:"#fff", fontWeight:"bold"}}> U</span></a>
         </div>
-        <ul className="nav">
+        <div className=''>
+        <ul className="nav ">
         
           <li className="nav-item nav-category">
             <span className="nav-link"><Trans>Navigation</Trans></span>
@@ -217,6 +218,38 @@ class Sidebar extends Component {
           }
 
 
+<li className={ this.isPathActive('/chart') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
+            <div className={ this.state.viewChartOpen ? 'nav-link menu-expanded' : 'nav-link' } onClick={ () => this.toggleMenuState('viewChartOpen') } data-toggle="collapse">
+              <span className="menu-icon">
+                <i className="mdi mdi-playlist-play"></i>
+              </span>
+              <span className="menu-title"><Trans>Chart</Trans></span>
+              <i className="menu-arrow"></i>
+            </div>
+            <Collapse in={ this.state.viewChartOpen }>
+              <div>
+                <ul className="nav flex-column sub-menu">
+                  {
+                    localStorage.getItem("setAuthority") == 1 ? <>
+                    
+                    <li className="nav-item"> <Link className={ this.isPathActive('/chart/IndianMap') ? 'nav-link active' : 'nav-link' } to="/chart/IndianMap"><Trans>Indian Map</Trans></Link></li>
+                     </>
+                    
+                    : 
+                    
+                    
+                    localStorage.getItem("setAuthority") == 2 ?<> 
+                     <li className="nav-item"> <Link className={ this.isPathActive('/chart/IndianMap') ? 'nav-link active' : 'nav-link' } to="/chart/IndianMap"><Trans>Indian Map</Trans></Link></li>
+                    </>
+                    
+                    :      <></>
+                  }
+                  
+                </ul>
+              </div>
+            </Collapse>
+          </li>
+
 {/*        
           <li className={ this.isPathActive('/basic-ui') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
             <div className={ this.state.basicUiMenuOpen ? 'nav-link menu-expanded' : 'nav-link' } onClick={ () => this.toggleMenuState('basicUiMenuOpen') } data-toggle="collapse">
@@ -346,6 +379,7 @@ class Sidebar extends Component {
             </a>
           </li> */}
         </ul>
+        </div>
       </nav>
     );
   }

@@ -3,6 +3,7 @@ import { Line, Bar, Doughnut, Pie, Scatter } from "react-chartjs-2";
 import axios from "axios";
 import { Grid } from "react-loader-spinner";
 import api from "../services/api";
+import StudentData from '../view-tables/StudentData'
 
 export class ChartJs extends Component {
   data = {
@@ -482,8 +483,7 @@ export class ChartJs extends Component {
               <div className="card-body">
                 <h4 className="card-title">Student Gender Ratio</h4>
                 {this.state.isFetching ? (
-                  // <Grid color="#00BFFF" height={40} width={40} />
-                  <Doughnut data={studentData} options={doughnutPieOptions} />
+                  <Grid color="#00BFFF" height={40} width={40} />
                 ) : (
                   <Doughnut data={studentData} options={doughnutPieOptions} />
                 )}
@@ -495,9 +495,9 @@ export class ChartJs extends Component {
               <div className="card-body">
                 <h4 className="card-title">Scholarship Eligible Students</h4>
                 {this.state.isFetching ? (
-                  <Pie data={scholarship} options={doughnutPieOptions} />
+                  <Grid color="#00BFFF" height={40} width={40} />
                 ) : (
-                  <Pie data={scholarship} options={doughnutPieOptions} />
+                  <Doughnut data={scholarship} options={doughnutPieOptions} />
                 )}
               </div>
             </div>
@@ -509,8 +509,7 @@ export class ChartJs extends Component {
               <div className="card-body">
                 <h4 className="card-title">StateWise Students</h4>
                 {this.state.isFetching ? (
-                  // <Grid color="#00BFFF" height={40} width={40} />
-                  <Bar data={StatewiseStudents} options={this.areaOptions} />
+                  <Grid color="#00BFFF" height={40} width={40} />
                 ) : (
                   <Bar data={StatewiseStudents} options={this.areaOptions} />
                 )}
@@ -525,7 +524,6 @@ export class ChartJs extends Component {
                 {this.state.isFetching ? (
                   <Grid color="#00BFFF" height={40} width={40} />
                 ) : (
-                  // <Bar data={StatewiseStudents} options={this.areaOptions} />
                   <Bar data={scholarshipEligible} options={this.areaOptions} />
                 )}
               </div>
@@ -549,40 +547,8 @@ export class ChartJs extends Component {
           </div>
         </div>
 
-        {/* ####################    TEACHERS    ################## */}
-        <hr></hr>
-        <h4 className="page-title">Teachers</h4>
-        <hr></hr>
-        <div className="row">
-          <div className="col-md-6 grid-margin stretch-card">
-            <div className="card">
-              <div className="card-body">
-                <h4 className="card-title">Total Teachers</h4>
-                {this.state.isFetching ? (
-                  <Grid color="#00BFFF" height={40} width={40} />
-                ) : (
-                  <Doughnut
-                    data={doughnutPieData}
-                    options={doughnutPieOptions}
-                  />
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6 grid-margin stretch-card">
-            <div className="card">
-              <div className="card-body">
-                <h4 className="card-title">StateWise Teachers</h4>
-                {this.state.isFetching ? (
-                  // <Grid color="#00BFFF" height={40} width={40} />
-                  <Bar data={StatewiseTeachers} options={this.areaOptions} />
-                ) : (
-                  <Bar data={StatewiseTeachers} options={this.areaOptions} />
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+        <br></br>
+        <StudentData/>
       </div>
     );
   }

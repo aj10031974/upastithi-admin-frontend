@@ -10,7 +10,7 @@ import MuiAlert from '@mui/material/Alert';
 import Papa from "papaparse";
 // import swal from ""
 import swal from "sweetalert";
-
+import countryList from 'react-select-country-list'
 import { JsonToTable } from "react-json-to-table";
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -23,6 +23,12 @@ export function TeacherForm() {
   
   const [dataTable, setdataTable] = React.useState({});
   const blankRows = [];
+
+  const options =  countryList().getData();
+  const countries = [];
+  for(var i = 0; i < options.length; i++){
+    countries.push(options[i].label)
+  }
 
   const handleClick = () => {
     setOpen(true);
@@ -844,10 +850,11 @@ export function TeacherForm() {
                           placeholder={state.formControls.Country.placeholder}
                           onChange={onChange}
                         >
-                          <option>India</option>
-                          <option>Italy</option>
-                          <option>Russia</option>
-                          <option>Britain</option>
+                          {
+                            countries.map((values)=>(
+                              <option>{values}</option>
+                            ))
+                          }
                         </select>
                       </div>
                     </Form.Group>

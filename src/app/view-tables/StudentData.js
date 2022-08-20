@@ -4,7 +4,7 @@ import { useState } from "react";
 import EnhancedTable from "../tables/TableComponent";
 import DataTable from "../tables/FilterableTable";
 import api from "../services/api";
-
+import axios from "axios";
 import Loader from "react-js-loader";
 
 
@@ -257,20 +257,47 @@ const rows = [
 export function BasicElements() {
   const [rows1, setRows] = useState([]);
   const [cols, setCols] = useState([]);
+  const [country , setCountry] = useState([]);
 
   useEffect(() => {
-   api.viewStudentsByInstitute(localStorage.getItem("InstituteID")).then((response) => {
-        console.log("response: ", response.data);
-        setRows(response.data.data);
-        setCols(response.data.header)
-      });
+
+    if(localStorage.getItem("setAuthority")=="3"){
       api.viewStudents().then((response) => {
         console.log("response: ", response.data);
         setRows(response.data.data);
         setCols(response.data.header)
+      }).catch((error)=>{
+          localStorage.clear()
+        //  history.push('/')
       })
-
+    }else if(localStorage.getItem("setAuthority")=="1" ){
+      api.viewStudents().then((response) => {
+        console.log("response: ", response.data);
+        setRows(response.data.data);
+        setCols(response.data.header)
+      }).catch((error)=>{
+          localStorage.clear()
+        //  history.push('/')
+      })
+    }else if(localStorage.getItem("setAuthority")=="2" ){
+      api.viewStudentsByInstitute(localStorage.getItem("InstituteID")).then((response) => {
+        console.log("response: ", response.data);
+        setRows(response.data.data);
+        setCols(response.data.header)
+      
+      }).catch((error)=>{
+          localStorage.clear()
+        //  history.push('/')
+      })
+    }else{
+      // history.push('/')
+    }
+   
+      
+      
   }, []);
+
+ 
 
   return (
     <div>

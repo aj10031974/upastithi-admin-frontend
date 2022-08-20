@@ -169,7 +169,12 @@ export default {
       method: "GET",
       url: "/viewAllClassWeb",
     }),
-
+    addStudentBulk: (form) =>
+    instance({
+      method: "POST",
+      url: "/addStudentBulk",
+      data: form,
+    }),
     
 
 
